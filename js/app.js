@@ -11,9 +11,7 @@ var Enemy = function() {
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
 Enemy.prototype.update = function(dt) {
-    // You should multiply any movement by the dt parameter
-    // which will ensure the game runs at the same speed for
-    // all computers.
+
 }
 
 // Draw the enemy on the screen, required method for game
@@ -34,15 +32,18 @@ Player.prototype.update = function(dt) {
     // all computers.
 }
 
-// Draw the enemy on the screen, required method for game
+// Draw the Player on the screen, required method for game
 Player.prototype.render = function() {
-    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+}
+
+Player.prototype.handleInput = function(key) {
+    console.log(key);
 }
 
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
-var allEnemies = [];
+var allEnemies = [new Enemy(), new Enemy()];
 var player = new Player();
 
 // This listens for key presses and sends the keys to your
