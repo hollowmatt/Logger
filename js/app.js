@@ -8,8 +8,9 @@ var Enemy = function() {
     this.sprite = 'images/enemy-bug.png';
 
     //need to define x and y
-    this.x = 100;
-    this.y = 100;
+    this.x = 0;
+    this.y = 100 * Math.random();
+    this.speed = 10 + Math.random() * 200;
   }
 
 // Update the enemy's position, required method for game
@@ -18,6 +19,7 @@ Enemy.prototype.update = function(dt) {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
+    this.x = this.x + (Math.random() * 2);
 }
 
 // Draw the enemy on the screen, required method for game
@@ -37,19 +39,26 @@ var Player = function() {
 
 Player.prototype = Object.create(Enemy.prototype);
 Player.prototype.constructor = Player;
+Player.prototype.update = function(dt) {
+
+}
+
 Player.prototype.handleInput = function(input) {
   switch (input) {
     case "up":
-      this.y = this.y - 75;
+      this.y = this.y - 76;
       break;
     case "down":
-      this.y = this.y + 75;
+      this.y = this.y + 76;
       break;
     case "left":
-      this.x = this.x - 75;
+      this.x = this.x - 76;
       break;
     case "right":
-      this.x = this.x + 75;
+      this.x = this.x + 76;
+      break;
+    case "esc":
+      this.init();
       break;
   }
   console.log("x coordinate: " + this.x + ", y coordinate: " + this.y);
