@@ -34,7 +34,7 @@ var Player = function() {
   Enemy.call(this);
   this.sprite = 'images/char-boy.png';
   this.x = 0;
-  this.y = 400;
+  this.y = 404;
 }
 
 Player.prototype = Object.create(Enemy.prototype);
@@ -46,16 +46,16 @@ Player.prototype.update = function(dt) {
 Player.prototype.handleInput = function(input) {
   switch (input) {
     case "up":
-      this.y = this.y - 76;
+      this.y = this.y - 83;
       break;
     case "down":
-      this.y = this.y + 76;
+      this.y = this.y + 83;
       break;
     case "left":
-      this.x = this.x - 76;
+      this.x = this.x - 101;
       break;
     case "right":
-      this.x = this.x + 76;
+      this.x = this.x + 101;
       break;
     case "esc":
       this.init();
