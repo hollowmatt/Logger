@@ -1,7 +1,8 @@
 //****
 //* Superclass: Avatar
+//*             Make a Superclass for both Enemy and Player
+//*             to extend from - I'll call it Avatar
 //****
-//Make a Superclass for both Enemy and Player to extend from - I'll call it Avatar
 var Avatar = function() {
   // Variables applied to each of our instances go here,
   // we've provided one for you to get started
@@ -23,18 +24,25 @@ Avatar.prototype.render = function() {
 }
 
 //****
-//Set variables for ROW and COL sizes on grid for movement
+//* Set variables for ROW and COL sizes on grid for movement
+//****
 var COL = 83;
 var ROW = 101;
-//co-ordinate min and max values
+//****
+//* co-ord min and max values
+//****
 var X_MIN = 0;
 var X_MAX = 404;
 var Y_MIN = -11;
 var Y_MAX = 404;
-
+//Set to level one of the game, each level adds another enemy
+var LEVEL = 1;
+//****
+//* This global method will set a row (y coordinate) for a given enemy,
+//* called from the Enemy constructor to setup the row of that enemy instance.
+//****
 var enemyRow = function() {
   var row = Math.floor((Math.random() *3)+1);
-  console.log(row);
   switch (row) {
     case 1:
       row = 72;
@@ -46,22 +54,22 @@ var enemyRow = function() {
       row = 238;
       break;
   }
-  console.log(row);
   return row;
 }
 
 //****
 //* Subclass: Enemy
+//*           Enemies our player must avoid
 //****
-// Enemies our player must avoid
 var Enemy = function() {
   Avatar.call(this);
   this.sprite = 'images/enemy-bug.png';
-  //need to define x and y
+  //need to define x and y of enemy
   this.x = 0;
   this.y = enemyRow();
   this.speed = 10 + Math.random() * 200;
 }
+
 //extend from Avatar Prototype
 Enemy.prototype = Object.create(Avatar.prototype);
 Enemy.prototype.constructor = Enemy;
@@ -78,26 +86,37 @@ Enemy.prototype.update = function(dt) {
     this.x = 0;
   }
   if ((Math.floor(this.x) == player.x) && (Math.floor(this.y) == player.y)) {
-    console.log("player dead");
-    player.x = COL * 0;
-    player.y = ROW * 4;
+    console.log("player dead, reset to starting position");
+    reset_player();
   }
 }
 
+var reset_player = function() {
+  player.x = COL * 0;
+  player.y = ROW * 4;
+}
+
+var reset_game = function() {
+  allEnemies = [];
+  allEnemies.push(new Enemy());
+  reset_player();
+}
 //****
 //* Subclass: Player
+//*           This class uses the update(), render() from superclass.
+//*           A handleInput() method is implemented locally.
 //****
-// This class uses a update(), render() from superclass and
-// a handleInput() method is implemented locally.
 var Player = function() {
   Avatar.call(this);
   this.sprite = 'images/char-boy.png';
   this.x = COL * 0;
   this.y = ROW * 4;
 }
+
 //Extend from Avatar prototype
 Player.prototype = Object.create(Avatar.prototype);
 Player.prototype.constructor = Player;
+
 //specific method to player
 Player.prototype.handleInput = function(input) {
   switch (input) {
@@ -105,7 +124,7 @@ Player.prototype.handleInput = function(input) {
       if (this.y > Y_MIN) {
         this.y -= COL;
       } else {
-        //got to the water, should set to next level here
+        allEnemies.push(new Enemy());
       }
       break;
     case "down":
@@ -124,7 +143,7 @@ Player.prototype.handleInput = function(input) {
       }
       break;
     case "esc":
-      //reset here
+      reset_game();
       break;
   }
   console.log("x coordinate: " + this.x + ", y coordinate: " + this.y);
@@ -133,7 +152,7 @@ Player.prototype.handleInput = function(input) {
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
-allEnemies = [new Enemy(), new Enemy(), new Enemy()];
+allEnemies = [new Enemy()];
 player = new Player();
 
 
