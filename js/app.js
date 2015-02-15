@@ -32,6 +32,24 @@ var X_MAX = 404;
 var Y_MIN = -11;
 var Y_MAX = 404;
 
+var enemyRow = function() {
+  var row = Math.floor((Math.random() *3)+1);
+  console.log(row);
+  switch (row) {
+    case 1:
+      row = 72;
+      break;
+    case 2:
+      row = 155;
+      break;
+    case 3:
+      row = 238;
+      break;
+  }
+  console.log(row);
+  return row;
+}
+
 //****
 //* Subclass: Enemy
 //****
@@ -41,10 +59,9 @@ var Enemy = function() {
   this.sprite = 'images/enemy-bug.png';
   //need to define x and y
   this.x = 0;
-  this.y = 100 * Math.random();
+  this.y = enemyRow();
   this.speed = 10 + Math.random() * 200;
 }
-
 //extend from Avatar Prototype
 Enemy.prototype = Object.create(Avatar.prototype);
 Enemy.prototype.constructor = Enemy;
@@ -54,7 +71,17 @@ Enemy.prototype.update = function(dt) {
   // You should multiply any movement by the dt parameter
   // which will ensure the game runs at the same speed for
   // all computers.
-  this.x = (this.x + (Math.random() * 2));
+  if (this.x < X_MAX) {
+    this.x = (this.x + (Math.random() * 0.8)) * (1 + dt);
+  } else {
+    //reset enemy to start of grid
+    this.x = 0;
+  }
+  if ((Math.floor(this.x) == player.x) && (Math.floor(this.y) == player.y)) {
+    console.log("player dead");
+    player.x = COL * 0;
+    player.y = ROW * 4;
+  }
 }
 
 //****
@@ -71,13 +98,14 @@ var Player = function() {
 //Extend from Avatar prototype
 Player.prototype = Object.create(Avatar.prototype);
 Player.prototype.constructor = Player;
-
 //specific method to player
 Player.prototype.handleInput = function(input) {
   switch (input) {
     case "up":
       if (this.y > Y_MIN) {
         this.y -= COL;
+      } else {
+        //got to the water, should set to next level here
       }
       break;
     case "down":
@@ -105,7 +133,7 @@ Player.prototype.handleInput = function(input) {
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
-allEnemies = [new Enemy(), new Enemy()];
+allEnemies = [new Enemy(), new Enemy(), new Enemy()];
 player = new Player();
 
 
