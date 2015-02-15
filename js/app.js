@@ -1,64 +1,102 @@
-// Enemies our player must avoid
-var Enemy = function() {
-    // Variables applied to each of our instances go here,
-    // we've provided one for you to get started
-
-    // The image/sprite for our enemies, this uses
-    // a helper we've provided to easily load images
-    this.sprite = 'images/enemy-bug.png';
-
-    //need to define x and y
-    this.x = 0;
-    this.y = 100 * Math.random();
-    this.speed = 10 + Math.random() * 200;
-  }
-
-// Update the enemy's position, required method for game
-// Parameter: dt, a time delta between ticks
-Enemy.prototype.update = function(dt) {
-    // You should multiply any movement by the dt parameter
-    // which will ensure the game runs at the same speed for
-    // all computers.
-    this.x = this.x + (Math.random() * 2);
+//****
+//* Superclass: Avatar
+//****
+//Make a Superclass for both Enemy and Player to extend from - I'll call it Avatar
+var Avatar = function() {
+  // Variables applied to each of our instances go here,
+  // we've provided one for you to get started
+  // The sprite uses a helper we've provided to easily load images
+  //default sprite will be char-boy
+  this.sprite = 'images/char-boy.png';
 }
 
-// Draw the enemy on the screen, required method for game
-Enemy.prototype.render = function() {
+// Update position, required method for game
+// Parameter: dt, a time delta between ticks
+Avatar.prototype.update = function(dt) {
+  //by default, nothing happening here - override this in subclasses
+}
+
+//Draw on the screen, required method for game
+Avatar.prototype.render = function() {
+  //by default, draw the sprite with the x, y coordinates
   ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 }
 
-// Now write your own player class
-// This class requires an update(), render() and
-// a handleInput() method.
-var Player = function() {
-  Enemy.call(this);
-  this.sprite = 'images/char-boy.png';
+//****
+//Set variables for ROW and COL sizes on grid for movement
+var COL = 83;
+var ROW = 101;
+//co-ordinate min and max values
+var X_MIN = 0;
+var X_MAX = 404;
+var Y_MIN = -11;
+var Y_MAX = 404;
+
+//****
+//* Subclass: Enemy
+//****
+// Enemies our player must avoid
+var Enemy = function() {
+  Avatar.call(this);
+  this.sprite = 'images/enemy-bug.png';
+  //need to define x and y
   this.x = 0;
-  this.y = 404;
+  this.y = 100 * Math.random();
+  this.speed = 10 + Math.random() * 200;
 }
 
-Player.prototype = Object.create(Enemy.prototype);
+//extend from Avatar Prototype
+Enemy.prototype = Object.create(Avatar.prototype);
+Enemy.prototype.constructor = Enemy;
+
+//Override the update function, for specific enemy features
+Enemy.prototype.update = function(dt) {
+  // You should multiply any movement by the dt parameter
+  // which will ensure the game runs at the same speed for
+  // all computers.
+  this.x = (this.x + (Math.random() * 2));
+}
+
+//****
+//* Subclass: Player
+//****
+// This class uses a update(), render() from superclass and
+// a handleInput() method is implemented locally.
+var Player = function() {
+  Avatar.call(this);
+  this.sprite = 'images/char-boy.png';
+  this.x = COL * 0;
+  this.y = ROW * 4;
+}
+//Extend from Avatar prototype
+Player.prototype = Object.create(Avatar.prototype);
 Player.prototype.constructor = Player;
-Player.prototype.update = function(dt) {
 
-}
-
+//specific method to player
 Player.prototype.handleInput = function(input) {
   switch (input) {
     case "up":
-      this.y = this.y - 83;
+      if (this.y > Y_MIN) {
+        this.y -= COL;
+      }
       break;
     case "down":
-      this.y = this.y + 83;
+      if (this.y < Y_MAX) {
+        this.y = this.y + 83;
+      }
       break;
     case "left":
-      this.x = this.x - 101;
+      if (this.x > X_MIN) {
+        this.x = this.x - 101;
+      }
       break;
     case "right":
-      this.x = this.x + 101;
+      if (this.x < X_MAX) {
+        this.x = this.x + 101;
+      }
       break;
     case "esc":
-      this.init();
+      //reset here
       break;
   }
   console.log("x coordinate: " + this.x + ", y coordinate: " + this.y);
@@ -74,7 +112,9 @@ player = new Player();
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
 document.addEventListener('keyup', function(e) {
+  console.log(e.keyCode);
   var allowedKeys = {
+    27: 'esc', //reset game
     37: 'left',
     38: 'up',
     39: 'right',
