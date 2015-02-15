@@ -37,6 +37,8 @@ var Y_MIN = -11;
 var Y_MAX = 404;
 //Set to level one of the game, each level adds another enemy
 var LEVEL = 1;
+var LIVES = 3;
+
 //****
 //* This global method will set a row (y coordinate) for a given enemy,
 //* called from the Enemy constructor to setup the row of that enemy instance.
@@ -87,15 +89,23 @@ Enemy.prototype.update = function(dt) {
   }
   if ((Math.floor(this.x) == player.x) && (Math.floor(this.y) == player.y)) {
     console.log("player dead, reset to starting position");
-    reset_player();
+    LIVES--;
+    if (LIVES === 0) {
+      //end game here, for now, just reset game;
+      reset_game;
+    } else {
+      reset_player();
+    }
   }
 }
 
+// function to reset player back to start position (after reaches end, or is hit)
 var reset_player = function() {
   player.x = COL * 0;
   player.y = ROW * 4;
 }
 
+// function to reset game to initial values
 var reset_game = function() {
   allEnemies = [];
   allEnemies.push(new Enemy());
