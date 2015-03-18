@@ -1,3 +1,10 @@
 Resources used for this app:
 ============================
 
+For further understanding of Game Engines, I looked up the Quintus HTML5 engine (http://www.html5quintus.com/documentation#.VQjpRhDF883) and looked at how they implement games.
+
+I also looked through the Reddit Gamedev discussions (https://www.reddit.com/r/gamedev) as well as the HTML5 Gave Devs forums (http://www.html5gamedevs.com/).
+
+
+
+

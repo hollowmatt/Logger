@@ -36,12 +36,14 @@ var X_MAX = 404;
 var Y_MIN = -11;
 var Y_MAX = 404;
 //Set to level one of the game, each level adds another enemy
+//in this version of the game.  Player gets 3 lives
 var LEVEL = 1;
 var LIVES = 3;
 
 //****
 //* This global method will set a row (y coordinate) for a given enemy,
 //* called from the Enemy constructor to setup the row of that enemy instance.
+//* It will randomly place the new enemy on one of the rows of stones.
 //****
 var enemyRow = function() {
   var row = Math.floor((Math.random() *3)+1);
@@ -72,7 +74,7 @@ var Enemy = function() {
   this.speed = 10 + Math.random() * 200;
 }
 
-//extend from Avatar Prototype
+//extend from Avatar Prototype, use the prototypical class methodolgy
 Enemy.prototype = Object.create(Avatar.prototype);
 Enemy.prototype.constructor = Enemy;
 
@@ -87,13 +89,16 @@ Enemy.prototype.update = function(dt) {
     //reset enemy to start of grid
     this.x = 0;
   }
+  //this will check for collisions with the player, and take appropriate action
   if ((Math.floor(this.x) == player.x) && (Math.floor(this.y) == player.y)) {
     console.log("player dead, reset to starting position");
     LIVES--;
-    if (LIVES === 0) {
-      //end game here, for now, just reset game;
-      reset_game;
+    console.log("lives is:" + LIVES);
+    if (LIVES < 1) {
+      //if you run out of lives, reset game;
+      reset_game();
     } else {
+      //if you have lives left, reset the player location
       reset_player();
     }
   }
@@ -103,13 +108,23 @@ Enemy.prototype.update = function(dt) {
 var reset_player = function() {
   player.x = COL * 0;
   player.y = ROW * 4;
+  update_board();
 }
 
 // function to reset game to initial values
 var reset_game = function() {
   allEnemies = [];
   allEnemies.push(new Enemy());
+  LIVES = 3;
+  LEVEL = 1;
   reset_player();
+}
+
+//function to update the Round and Lives on the board
+var update_board = function() {
+  //change the value in the CSS id="round" and CSS id="lives"
+  document.getElementById("round").innerHTML = LEVEL;
+  document.getElementById("lives").innerHTML = LIVES;
 }
 //****
 //* Subclass: Player
@@ -127,7 +142,10 @@ var Player = function() {
 Player.prototype = Object.create(Avatar.prototype);
 Player.prototype.constructor = Player;
 
-//specific method to player
+//specific method to player to handle the player movement.
+//This will check to see if the player is within the bounds of the game.
+//If the player reaches the top, and hits up again, increments the level
+//of the game, and moves player back to start.
 Player.prototype.handleInput = function(input) {
   switch (input) {
     case "up":
@@ -135,6 +153,8 @@ Player.prototype.handleInput = function(input) {
         this.y -= COL;
       } else {
         allEnemies.push(new Enemy());
+        LEVEL++;
+        reset_player();
       }
       break;
     case "down":
