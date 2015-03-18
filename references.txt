@@ -5,6 +5,6 @@ For further understanding of Game Engines, I looked up the Quintus HTML5 engine 
 
 I also looked through the Reddit Gamedev discussions (https://www.reddit.com/r/gamedev) as well as the HTML5 Gave Devs forums (http://www.html5gamedevs.com/).
 
-
+I struggled a bit with the collision detection, searching with google lead to this site (https://msdn.microsoft.com/en-us/library/ie/gg589497%28v=vs.85%29.aspx), which used an idea of an 'offset' to broaden (a bit) the window of the collision.
 
 

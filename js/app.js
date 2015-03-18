@@ -90,8 +90,8 @@ Enemy.prototype.update = function(dt) {
     this.x = 0;
   }
   //this will check for collisions with the player, and take appropriate action
-  if ((Math.floor(this.x) == player.x) && (Math.floor(this.y) == player.y)) {
-    console.log("player dead, reset to starting position");
+  if (collide(this.x, player.x) && collide(this.y, player.y)) {
+      console.log("player dead, reset to starting position");
     LIVES--;
     console.log("lives is:" + LIVES);
     if (LIVES < 1) {
@@ -101,6 +101,16 @@ Enemy.prototype.update = function(dt) {
       //if you have lives left, reset the player location
       reset_player();
     }
+  }
+}
+
+//This will check for the collision: 20px buffer around the location of the enemy
+//for the detection to ensure accuracy - return true if collsion, false if not
+var collide = function(enemy, player) {
+  if (Math.floor(enemy) < (player + 20) && Math.floor(enemy) >(player - 20)) {
+    return true;
+  } else {
+    return false;
   }
 }
 
