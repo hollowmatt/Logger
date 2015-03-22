@@ -9,19 +9,19 @@ var Avatar = function() {
   // The sprite uses a helper we've provided to easily load images
   //default sprite will be char-boy
   this.sprite = 'images/char-boy.png';
-}
+};
 
 // Update position, required method for game
 // Parameter: dt, a time delta between ticks
 Avatar.prototype.update = function(dt) {
   //by default, nothing happening here - override this in subclasses
-}
+};
 
 //Draw on the screen, required method for game
 Avatar.prototype.render = function() {
   //by default, draw the sprite with the x, y coordinates
   ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-}
+};
 
 //****
 //* Set variables for ROW and COL sizes on grid for movement
@@ -59,7 +59,7 @@ var enemyRow = function() {
       break;
   }
   return row;
-}
+};
 
 //****
 //* Subclass: Enemy
@@ -72,7 +72,7 @@ var Enemy = function() {
   this.x = 0;
   this.y = enemyRow();
   this.speed = 10 + Math.random() * 200;
-}
+};
 
 //extend from Avatar Prototype, use the prototypical class methodolgy
 Enemy.prototype = Object.create(Avatar.prototype);
@@ -102,7 +102,7 @@ Enemy.prototype.update = function(dt) {
       reset_player();
     }
   }
-}
+};
 
 //This will check for the collision: 20px buffer around the location of the enemy
 //for the detection to ensure accuracy - return true if collsion, false if not
@@ -112,14 +112,14 @@ var collide = function(enemy, player) {
   } else {
     return false;
   }
-}
+};
 
 // function to reset player back to start position (after reaches end, or is hit)
 var reset_player = function() {
   player.x = COL * 0;
   player.y = ROW * 4;
   update_board();
-}
+};
 
 // function to reset game to initial values
 var reset_game = function() {
@@ -128,14 +128,15 @@ var reset_game = function() {
   LIVES = 3;
   LEVEL = 1;
   reset_player();
-}
+};
 
 //function to update the Round and Lives on the board
 var update_board = function() {
   //change the value in the CSS id="round" and CSS id="lives"
   document.getElementById("round").innerHTML = LEVEL;
   document.getElementById("lives").innerHTML = LIVES;
-}
+};
+
 //****
 //* Subclass: Player
 //*           This class uses the update(), render() from superclass.
@@ -146,7 +147,7 @@ var Player = function() {
   this.sprite = 'images/char-boy.png';
   this.x = COL * 0;
   this.y = ROW * 4;
-}
+};
 
 //Extend from Avatar prototype
 Player.prototype = Object.create(Avatar.prototype);
@@ -187,7 +188,7 @@ Player.prototype.handleInput = function(input) {
       break;
   }
   console.log("x coordinate: " + this.x + ", y coordinate: " + this.y);
-}
+};
 
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
