@@ -160,7 +160,7 @@ Player.prototype.constructor = Player;
 Player.prototype.handleInput = function(input) {
   switch (input) {
     case "up":
-      if (this.y > Y_MIN) {
+      if (this.y > (Y_MIN + ROW)) {
         this.y -= COL;
       } else {
         allEnemies.push(new Enemy());
