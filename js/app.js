@@ -32,7 +32,7 @@ var ENEMY_SPRITE = 'images/enemy-bug.png';
 var Avatar = function() {
   // The sprite uses a helper we've provided to easily load images
   // default sprite will be char-boy
-  this.sprite = 'images/char-boy.png';
+  this.sprite = USER_SPRITE;
 };
 
 //** 
